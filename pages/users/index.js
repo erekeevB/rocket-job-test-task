@@ -3,83 +3,45 @@ import Link from 'next/link'
 import { InputLabel, MenuItem, Select } from '@material-ui/core'
 import Paginator from '../../components/Paginator'
  
-const PostsList = ({posts, currentPage, size}) => {
+const PostsList = ({users}) => {
     return (
         <div className='w-4/5 mx-auto my-16'>
-            <div className='flex justify-between items-center mb-5'>
-                <div>
-                    <InputLabel id="label">Size</InputLabel>
-                    <Select labelId="label" id="select" value={size ? size : 'All'}>
-                        <MenuItem value='All'>All</MenuItem>
-                        <MenuItem value={5}>5</MenuItem>
-                        <MenuItem value={10}>10</MenuItem>
-                        <MenuItem value={20}>20</MenuItem>
-                        <MenuItem value={50}>50</MenuItem>
-                    </Select>
-                </div>
-                {(currentPage && size) ?
-                    <Paginator currentPage={parseInt(currentPage)} pages={Math.floor(100/size)} /> :
-                    <Paginator currentPage={1} pages={1} />
-                }
-            </div>
-            {posts ?
-                posts.map((el)=>{
+            <h5>Users</h5>
+            {users ?
+                users.map((el)=>{
                     return(
                         <div key={el.id} className='shadow-md w-full h-26 overflow-hidden rounded-md p-8 my-5'>
-                            <Link href={'/posts/'+el.id}><a><h4>{el.title}</h4></a></Link>
-                            <div className='overflow-ellipsis overflow-hidden'>{el.body}</div>
+                            <div className='flex justify-between items-end'>
+                                <Link href={'/users/'+el.id}><a><h5>{el.username}</h5></a></Link>
+                                <h6>{el.email}</h6>
+                            </div>
+                            <Link href={'/users/'+el.id}><a>
+                                <div className='overflow-ellipsis overflow-hidden'>{el.name}</div>
+                            </a></Link>
                         </div>
                     )
                 })
             :
                 <h4>No Result Found</h4>
             }
-            <div className='flex justify-between items-center mt-5'>
-                <div>
-                    <InputLabel id="label">Size</InputLabel>
-                    <Select labelId="label" id="select" value={size ? size : 'All'}>
-                        <MenuItem value='All'>All</MenuItem>
-                        <MenuItem value={5}>5</MenuItem>
-                        <MenuItem value={10}>10</MenuItem>
-                        <MenuItem value={20}>20</MenuItem>
-                        <MenuItem value={50}>50</MenuItem>
-                    </Select>
-                </div>
-                {(currentPage && size) ?
-                    <Paginator currentPage={parseInt(currentPage)} pages={Math.floor(100/size)} /> :
-                    <Paginator currentPage={1} pages={1} />
-                }
-            </div>
         </div>
     )
 
 }
 
-export async function getServerSideProps({query}){
+export async function getServerSideProps(){
 
-    let tempQuery = '';
+    let users = await fetch('https://jsonplaceholder.typicode.com/users')
+    users = await users.json()
 
-    if(query.page){
-        tempQuery+='?_page='+query.page
-    }
-
-    if(query.limit){
-        tempQuery+='&_limit='+query.limit
-    }
-
-    let posts = await fetch('https://jsonplaceholder.typicode.com/users'+tempQuery)
-    posts = await posts.json()
-
-    if(!posts){
+    if(!users){
         return{
             notFound: true
         }
     }
     return{
         props: {
-            posts: posts,
-            ...(query.page ? {currentPage: query.page} : {}),
-            ...(query.limit ? {size: query.limit} : {}),
+            users: users
         }
     }
 

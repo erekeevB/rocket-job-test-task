@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { InputLabel, MenuItem, Select } from '@material-ui/core'
 import Paginator from '../../components/Paginator'
  
-const PostsList = ({posts, currentPage, size}) => {
+const PostsList = ({photos, currentPage, size}) => {
     return (
         <div className='w-4/5 mx-auto my-16'>
             <div className='flex justify-between items-center mb-5'>
@@ -22,18 +22,20 @@ const PostsList = ({posts, currentPage, size}) => {
                     <Paginator currentPage={1} pages={1} />
                 }
             </div>
-            {posts ?
-                posts.map((el)=>{
+            <section className='grid grid-cols-12 gap-10'>
+            {photos ?
+                photos.map((el)=>{
                     return(
                         <div key={el.id} className='shadow-md w-full h-26 overflow-hidden rounded-md p-8 my-5'>
-                            <Link href={'/posts/'+el.id}><a><h4>{el.title}</h4></a></Link>
-                            <div className='whitespace-nowrap overflow-hidden overflow-ellipsis'>{el.body}</div>
+                            <Link href={'/photos/'+el.id}><a><h4>{el.title}</h4></a></Link>
+                            <Link href={'/photos/'+el.id}><a><img src={el.url} /></a></Link>
                         </div>
                     )
                 })
             :
                 <h4>No Result Found</h4>
             }
+            </section>
             <div className='flex justify-between items-center mt-5'>
                 <div>
                     <InputLabel id="label">Size</InputLabel>
@@ -66,17 +68,17 @@ export async function getServerSideProps({query}){
         tempQuery+='&_limit='+query.limit
     }
 
-    let posts = await fetch('https://jsonplaceholder.typicode.com/posts'+tempQuery)
-    posts = await posts.json()
+    let photos = await fetch('https://jsonplaceholder.typicode.com/photos'+tempQuery)
+    photos = await photos.json()
 
-    if(!posts){
+    if(!photos){
         return{
             notFound: true
         }
     }
     return{
         props: {
-            posts: posts,
+            photos: photos,
             ...(query.page ? {currentPage: query.page} : {}),
             ...(query.limit ? {size: query.limit} : {}),
         }

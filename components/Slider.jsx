@@ -8,16 +8,17 @@ const SliderElem = ({
     url,
     title,
     body,
-    name
+    name,
+    onlyPhoto
     }) => {
 
     return(
 
         <Link href={'/'+name+'/'+id}><a>
-            <div className='h-full w-full p-10'>
-                {title && <h3 className='mb-5'>{title}</h3>}
-                {url && <img className='' src={url}/>}
-                {body && <div className='text-black text-lg'>{body}</div>}
+            <div className={'w-full h-full '+className}>
+                {(title && !onlyPhoto) ? <h3 className='mb-5'>{title}</h3> : null}
+                {url && <img className='w-full top-0 left-0' src={url}/>}
+                {(body && !onlyPhoto) ? <div className='text-black text-lg'>{body}</div> : null}
             </div>
         </a></Link>
 
@@ -25,7 +26,7 @@ const SliderElem = ({
 
 }
 
-const SliderContainer = ({objects, name, period, afterClickPeriod}) => {
+const SliderContainer = ({objects, name, period, afterClickPeriod, onlyPhoto, className}) => {
 
     let [currEl, setCurrEl] = useState(0)
 
@@ -83,7 +84,7 @@ const SliderContainer = ({objects, name, period, afterClickPeriod}) => {
     }
 
     return (
-        <div className='relative w-full h-96 my-8 border-2 border-secondary rounded-md'>
+        <div className={'relative w-full my-8 border-2 border-secondary rounded-md'}>
             <button 
                 className='absolute w-24 h-full -left-0 opacity-0 hover:opacity-75'
                 onClick={handleLeftButton}>
@@ -109,7 +110,7 @@ const SliderContainer = ({objects, name, period, afterClickPeriod}) => {
                     )
                 })}
             </div>
-            <SliderElem {...objects[currEl]} name={name} className='w-full h-full'/>
+            <SliderElem onlyPhoto={onlyPhoto} {...objects[currEl]} name={name} className={className}/>
         </div>
     )
 

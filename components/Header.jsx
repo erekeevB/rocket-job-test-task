@@ -10,11 +10,14 @@ const Header = () => {
                     <Link href='/users'>
                         <a className='align-middle text-black'>Users</a>
                     </Link>
+                    <Link href='/posts'>
+                        <a className='align-middle text-black'>Posts</a>
+                    </Link>
                     <Link href='/albums'>
                         <a className='align-middle text-black'>Albums</a>
                     </Link>
-                    <Link href='/profile'>
-                        <a className='align-middle text-black'>My Profile</a>
+                    <Link href='/albums'>
+                        <a className='align-middle text-black'>Photos</a>
                     </Link>
                 </div>
             </div>

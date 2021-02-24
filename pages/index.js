@@ -10,9 +10,15 @@ export default function Home({posts, photos}) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <main className='w-4/5 mx-auto mt-10'>
-                <h5 className='my-2'>Posts</h5>
-                <SliderContainer objects={posts} name='posts' period={1} afterClickPeriod={5}/>
+            <main style={{height: 'fit-content'}} className='w-4/5 mx-auto mt-10 grid grid-cols-2 gap-10'>
+                <div>
+                    <h5 className='my-2'>Posts</h5>
+                    <SliderContainer objects={posts} className='p-10' onlyPhoto={false} name='posts' period={3} afterClickPeriod={5}/>
+                </div>
+                <div className=''>
+                    <h5 className='my-2'>Photos</h5>
+                    <SliderContainer objects={photos} className='' onlyPhoto={true} name='photos' period={3} afterClickPeriod={5}/>
+                </div>
             </main>
 
         </div>
